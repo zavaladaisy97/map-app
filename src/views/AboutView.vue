@@ -26,10 +26,15 @@ export default {
         zoom: 9, // starting zoom
         projection: "globe", // display the map as a 3D globe
       });
+      // create the popup
+      const popup = new mapboxgl.Popup({ offset: 25 }).setText("here is my house");
+      // Create a default Marker
+      const marker1 = new mapboxgl.Marker().setLngLat([-101.412, 20.003]).setPopup(popup).addTo(map);
 
       map.on("style.load", () => {
         map.setFog({}); // Set the default atmosphere style
       });
+      console.log(marker1, popup);
     },
   },
 };
@@ -37,8 +42,8 @@ export default {
 
 <style scoped>
 #map {
-  height: 300px;
+  height: 500px;
   width: 500px;
-  margin-left: 25px;
+  margin-left: 100px;
 }
 </style>
