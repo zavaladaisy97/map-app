@@ -10,31 +10,39 @@
 
 export default {
   data: function () {
-    return {};
+    return {
+      places: [],
+    };
   },
   created: function () {},
   mounted: function () {
-    this.showMap();
+    this.placesIndex();
   },
   methods: {
+    placesIndex: function () {
+      //this is where we make an API call to backend
+      this.places = [
+        { lat: -25.363, lng: 131.044, description: "A place in Australia" },
+        { lat: -33.8675, lng: 151.207, description: "The main city!" },
+      ];
+      this.showMap();
+    },
+
     showMap: function () {
       mapboxgl.accessToken = process.env.VUE_APP_MY_MAP_KEY;
       const map = new mapboxgl.Map({
         container: "map", // container ID
-        style: "mapbox://styles/mapbox/streets-v11", // style URL
-        center: [-101.4167, 20.0027], // starting position [lng, lat]
+        style: "mapbox://styles/mapbox/light-v10", // style URL
+        center: [this.places[0].lng, this.places[0].lat], // starting position [lng, lat]
         zoom: 9, // starting zoom
         projection: "globe", // display the map as a 3D globe
       });
-      // create the popup
-      const popup = new mapboxgl.Popup({ offset: 25 }).setText("here is my house");
-      // Create a default Marker
-      const marker1 = new mapboxgl.Marker().setLngLat([-101.412, 20.003]).setPopup(popup).addTo(map);
 
-      map.on("style.load", () => {
-        map.setFog({}); // Set the default atmosphere style
+      this.places.forEach((place) => {
+        let popup = new mapboxgl.Popup({ offset: 25 }).setText(place.description);
+        let marker = new mapboxgl.Marker().setLngLat([place.lng, place.lat]).setPopup(popup).addTo(map);
+        console.log(marker);
       });
-      console.log(marker1, popup);
     },
   },
 };
@@ -42,8 +50,8 @@ export default {
 
 <style scoped>
 #map {
-  height: 500px;
-  width: 500px;
-  margin-left: 100px;
+  height: 750px;
+  width: 750px;
+  margin-left: 25px;
 }
 </style>
